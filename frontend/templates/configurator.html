@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}PC Toplama Sihirbazı - {% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <!-- Sol Taraf: Donanım Seçim Formu -->
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Yeni Donanım Talebi Oluştur</h5>
+            </div>
+            <div class="card-body">
+                <form id="configuratorForm">
+                    <!-- İşlemci Seçimi -->
+                    <div class="mb-3">
+                        <label for="cpuSelect" class="form-label fw-bold">İşlemci (CPU)</label>
+                        <select class="form-select" id="cpuSelect">
+                            <option value="">İşlemci Seçin...</option>
+                            <option value="cpu_1" data-socket="AM5">AMD Ryzen 7 7845HS (Soket: AM5)</option>
+                            <option value="cpu_2" data-socket="LGA1700">Intel Core i7-13700K (Soket: LGA1700)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Anakart Seçimi -->
+                    <div class="mb-3">
+                        <label for="mbSelect" class="form-label fw-bold">Anakart</label>
+                        <select class="form-select" id="mbSelect" disabled>
+                            <option value="">Önce İşlemci Seçin...</option>
+                            <option value="mb_1" data-socket="AM5" data-ram="DDR5">MSI MAG B650 TOMAHAWK (AM5 - DDR5)</option>
+                            <option value="mb_2" data-socket="LGA1700" data-ram="DDR5">ASUS TUF GAMING Z790 (LGA1700 - DDR5)</option>
+                            <option value="mb_3" data-socket="AM4" data-ram="DDR4">Gigabyte B450M S2H (AM4 - DDR4)</option>
+                        </select>
+                    </div>
+
+                    <!-- RAM Seçimi -->
+                    <div class="mb-3">
+                        <label for="ramSelect" class="form-label fw-bold">RAM Bellek</label>
+                        <select class="form-select" id="ramSelect">
+                            <option value="">RAM Seçin...</option>
+                            <option value="ram_1" data-type="DDR5">Corsair Vengeance 32GB (2x16GB) DDR5 6000MHz</option>
+                            <option value="ram_2" data-type="DDR4">Kingston Fury Beast 16GB DDR4 3200MHz</option>
+                        </select>
+                    </div>
+
+                    <!-- Güç Kaynağı Seçimi -->
+                    <div class="mb-4">
+                        <label for="psuSelect" class="form-label fw-bold">Güç Kaynağı (PSU)</label>
+                        <select class="form-select" id="psuSelect">
+                            <option value="">Güç Kaynağı Seçin...</option>
+                            <option value="psu_1" data-watt="850">Corsair RM850x 850W 80+ Gold</option>
+                            <option value="psu_2" data-watt="500">FSP Hydro 500W 80+ Bronze</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-warning" id="checkRulesBtn">Uyumluluğu Kontrol Et</button>
+                        <button type="submit" class="btn btn-success" id="submitBtn" disabled>Talebi Onaya Gönder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağ Taraf: Uyumluluk Durumu (Rule Engine Çıktısı) -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Sistem Durumu</h5>
+            </div>
+            <div class="card-body">
+                <div id="statusAlert" class="alert alert-secondary">
+                    Donanım seçimi bekleniyor...
+                </div>
+                <ul class="list-group list-group-flush" id="ruleList">
+                    <li class="list-group-item text-muted" id="rule-socket"><small>🔄 Soket Uyumluluğu: Bekleniyor</small></li>
+                    <li class="list-group-item text-muted" id="rule-ram"><small>🔄 RAM Uyumluluğu: Bekleniyor</small></li>
+                    <li class="list-group-item text-muted" id="rule-power"><small>🔄 Güç Yeterliliği: Bekleniyor</small></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Dinamik mantığı çalıştıracak JavaScript dosyamız -->
+<script src="{{ url_for('static', filename='js/wizard.js') }}"></script>
+{% endblock %}
